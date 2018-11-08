@@ -1,13 +1,11 @@
 package classfile
 
-type ConstantClassInfo struct{
-	nameIndex uint16
+type ConstantNameAndTypeInfo struct {
+	nameIndex       uint16
 	descriptorIndex uint16
 }
 
-func (self * ConstantClassInfo) readInfo(reader *ClassReader){
+func (self *ConstantNameAndTypeInfo) readInfo(reader *ClassReader) {
 	self.nameIndex = reader.readUint16()
 	self.descriptorIndex = reader.readUint16()
 }
-
-

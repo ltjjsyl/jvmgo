@@ -2,10 +2,10 @@ package classfile
 
 import "math"
 
-type ConstantUtf8Info struct{
+type ConstantIntegerInfo struct{
 	val int32
 }
-func (self * ConstantUtf8Info) readInfo(reader *ClassReader){
+func (self * ConstantIntegerInfo) readInfo(reader *ClassReader){
 	bytes := reader.readUint32()
 	self.val = int32(bytes)
 }
@@ -29,7 +29,7 @@ func (self * ConstantLongInfo) readInfo(reader *ClassReader){
 type ConstantDoubleInfo struct{
 	val float64
 }
-func (self * ConstantFloatInfo) readInfo(reader *ClassReader){
+func (self * ConstantDoubleInfo) readInfo(reader *ClassReader){
 	bytes := reader.readUint64()
 	self.val = math.Float64frombits(bytes)
 }

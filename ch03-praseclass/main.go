@@ -2,7 +2,9 @@ package main
 
 import "fmt"
 import "strings"
-import "jvmgo/ch03-parseclass/classpath"
+import "jvmgo/ch03-praseclass/classfile"
+import "jvmgo/ch03-praseclass/classpath"
+
 // ./ch02-classload -Xjre "C:\Program Files\Java\jdk1.8.0_151\jre" java.lang.Object
 func main() {
 	cmd := parseCmd()
@@ -19,14 +21,24 @@ func startJVM(cmd *Cmd) {
 	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
 	fmt.Printf("classpath:%v class:%v args:%v\n", cp, cmd.class, cmd.args)
 	className := strings.Replace(cmd.class, ".", "/", -1)
-
 	fmt.Printf("className:%v\n",  className) 
+	cf := loadClass(className, cp)
+	fmt.Printf(cmd.class) 
+	printClassInfo(cf)
+}
+
+func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile{
 	classData, _, err := cp.ReadClass(className)
 	if err != nil {
-		fmt.Printf("Could not find or load main class %s\n", cmd.class)
-		return
+		panic(err)
 	}
+	cf, err := classfile.Parse(classData)
+	if err != nil {
+		panic(err)
+	}
+	return cf
+}
 
-	fmt.Printf("class data:%v\n", classData)
-
+func printClassInfo(cf *classfile.ClassFile){
+	fmt.Printf("verrsion:%v.%v\n", cf.MajorVersion(), cf.MinorVersion())
 }

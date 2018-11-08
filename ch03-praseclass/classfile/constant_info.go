@@ -10,7 +10,6 @@ const(
 	CONSTANT_Double = 6
 	CONSTANT_Class = 7
 	CONSTANT_String = 8
-	CONSTANT_Class = 9
 	CONSTANT_Fieldref = 9
 	CONSTANT_Methodref = 10
 	CONSTANT_InterfaceMethodref = 11

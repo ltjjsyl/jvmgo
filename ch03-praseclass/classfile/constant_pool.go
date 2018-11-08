@@ -2,17 +2,17 @@ package classfile
 
 type ConstantPool []ConstantInfo
 
-type ContantInfo interface {
+type ConstantInfo interface {
 	readInfo(reader *ClassReader)
 }
 //??
-func readConstantInfo(reader *ClassReader, cp ConstantPool) ContantInfo {
+func readConstantInfo(reader *ClassReader, cp ConstantPool) ConstantInfo {
 	tag := reader.readUint8()
 	c := newConstantInfo(tag, cp)
 	return c
 }
 //?
-func newConstantInfo(tag uint8, cp ConstantPool) ContantInfo {
+func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 	switch tag {
 	case CONSTANT_Utf8:
 		return &ConstantUtf8Info{}
@@ -31,7 +31,7 @@ func newConstantInfo(tag uint8, cp ConstantPool) ContantInfo {
 	case CONSTANT_Fieldref:
 		return &ConstantFieldrefInfo{ConstantMemberrefInfo{cp: cp}}
 	case CONSTANT_Methodref:
-		return &ConstantMethodrefrInfo{ConstantMemberrefInfo{cp: cp}}
+		return &ConstantMethodrefInfo{ConstantMemberrefInfo{cp: cp}}
 	case CONSTANT_InterfaceMethodref:
 		return &ConstantInterfaceMethodrefInfo{ConstantMemberrefInfo{cp: cp}}
 	case CONSTANT_NameAndType:
@@ -61,7 +61,7 @@ func readConstantPool(reader *ClassReader) ConstantPool {
 	return cp
 }
 
-func (self ConstantPool) getContantInfo(index uint16) ContantInfo {
+func (self ConstantPool) getConstantInfo(index uint16) ConstantInfo {
 	if cpInfo := self[index]; cpInfo != nil {
 		return cpInfo
 	}
@@ -71,7 +71,7 @@ func (self ConstantPool) getContantInfo(index uint16) ContantInfo {
 func (self ConstantPool) getNameAndType(index uint16) (string, string) {
 	ntInfo := self.getConstantInfo(index).(*ConstantNameAndTypeInfo)
 	name := self.getUtf8(ntInfo.nameIndex)
-	_type := self.getUtf8(ntInfo.descroptorIndex)
+	_type := self.getUtf8(ntInfo.descriptorIndex)
 	return name, _type
 }
 

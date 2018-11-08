@@ -13,7 +13,7 @@ type ClassFile struct{
 	interfaces []uint16
 	fields []*MemberInfo
 	methods []*MemberInfo
-	atttibutes []AttributeInfo
+	attributes []AttributeInfo
 }
 //返回类型??
 func Parse(classData []byte) (cf *ClassFile, err error){
@@ -27,7 +27,7 @@ func Parse(classData []byte) (cf *ClassFile, err error){
 		}
 	}()
 	cr := &ClassReader{classData}
-	cf := &ClassFile{}
+	cf = &ClassFile{}
 	cf.read(cr)
 	return
 }
@@ -40,13 +40,17 @@ func (self *ClassFile) read(reader *ClassReader){
 	self.thisClass = reader.readUint16()
 	self.superClass = reader.readUint16()
 	self.interfaces = reader.readUint16s()
-	self.fields = readMember(reader, self.constantPool)
-	self.methods = readMember(reader, self.constantPool)
+	self.fields = readMembers(reader, self.constantPool)
+	self.methods = readMembers(reader, self.constantPool)
 	self.attributes = readAttributes(reader, self.constantPool)
 }
 
-func (self *ClassFile) MajorVersion() Uint16{
+func (self *ClassFile) MajorVersion() uint16{
 	return self.majorVersion
+}
+
+func (self *ClassFile) MinorVersion() uint16{
+	return self.minorVersion
 }
 
 func (self *ClassFile) ClassName() string{
@@ -62,42 +66,29 @@ func (self *ClassFile) SuperClassName() string{
 
 func (self *ClassFile) InterfaceNames() []string{
 	interfaceNames := make([]string, len(self.interfaces))
-	for i, cpIndex : range self.interfaces{
+	for i, cpIndex := range self.interfaces {
 		interfaceNames[i] = self.constantPool.getClassName(cpIndex)
 	}
-
 	return interfaceNames
 }
 
 func (self *ClassFile) readAndCheckMagic(reader *ClassReader){
 	magic := reader.readUint32()
-	if magic != 0xCAFEBABE{
+	if magic != 0xCAFEBABE {
 		panic("java.lang.ClassFormatError:magic!")
 	}
 }
 
 func (self *ClassFile) readAndCheckVersion(reader *ClassReader){
 	self.minorVersion = reader.readUint16()
-	self.majorVersion == reader.readUint16()
+	self.majorVersion = reader.readUint16()
 	switch self.majorVersion{
 	case 45:
 		return
-	case 46, 47, 48, 49, 50, 51, 52
+	case 46, 47, 48, 49, 50, 51, 52:
 		if self.minorVersion == 0{
 			return
 		}
 	}
 	panic("java.lang.UnsupportClassVersionError")	
-}
-
-func (self *ClassFile) readAndCheckVersion(reader *ClassReader){
-	
-}
-
-func (self *ClassFile) readAndCheckVersion(reader *ClassReader){
-	
-}
-
-func (self *ClassFile) readAndCheckVersion(reader *ClassReader){
-	
 }
