@@ -1,7 +1,7 @@
 package classpath
+
 import "os"
 import "strings"
-import "fmt"
 
 const pathListSeparator = string(os.PathListSeparator)
 
@@ -11,19 +11,16 @@ type Entry interface {
 }
 
 func newEntry(path string) Entry {
-	if strings.Contains(path, pathListSeparator){
-		fmt.Printf("classNamexxxxx1:%v\n",  "newCompositeEntry")
+	if strings.Contains(path, pathListSeparator) {
 		return newCompositeEntry(path)
 	}
-	if strings.HasSuffix(path, "*"){
-		fmt.Printf("classNamexxxxx2:%v\n",  "newWildcardEntry")
+	if strings.HasSuffix(path, "*") {
 		return newWildcardEntry(path)
 	}
 	if strings.HasSuffix(path, ".jar") || strings.HasSuffix(path, ".JAR") ||
-	strings.HasSuffix(path, ".zip") || strings.HasSuffix(path, ".ZIP"){
-		fmt.Printf("classNamexxxxx3:%v\n",  "newZipEntry")
+		strings.HasSuffix(path, ".zip") || strings.HasSuffix(path, ".ZIP") {
 		return newZipEntry(path)
 	}
-	fmt.Printf("classNamexxxxx4:%v\n",  "newDirEntry")
+
 	return newDirEntry(path)
 }

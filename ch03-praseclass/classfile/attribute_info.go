@@ -1,13 +1,17 @@
 package classfile
 
+import "fmt"
+
 type AttributeInfo interface {
 	readInfo(reader *ClassReader)
 }
 
 func readAttributes(reader *ClassReader, cp ConstantPool) []AttributeInfo {
 	attributesCount := reader.readUint16()
+	fmt.Printf("attributesCount =%v\n", attributesCount)
 	attributes := make([]AttributeInfo, attributesCount)
 	for i := range attributes {
+		fmt.Printf("i =%v\n", i)
 		attributes[i] = readAttribute(reader, cp)
 	}
 	return attributes

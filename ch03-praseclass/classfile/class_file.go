@@ -2,26 +2,27 @@ package classfile
 
 import "fmt"
 
-type ClassFile struct{
+type ClassFile struct {
 	//magic uint32
 	minorVersion uint16
 	majorVersion uint16
 	constantPool ConstantPool
-	accessFlags uint16
-	thisClass uint16
-	superClass uint16
-	interfaces []uint16
-	fields []*MemberInfo
-	methods []*MemberInfo
-	attributes []AttributeInfo
+	accessFlags  uint16
+	thisClass    uint16
+	superClass   uint16
+	interfaces   []uint16
+	fields       []*MemberInfo
+	methods      []*MemberInfo
+	attributes   []AttributeInfo
 }
+
 //返回类型??
-func Parse(classData []byte) (cf *ClassFile, err error){
-	defer func(){
-		if r := recover(); r != nil{
+func Parse(classData []byte) (cf *ClassFile, err error) {
+	defer func() {
+		if r := recover(); r != nil {
 			var ok bool
 			err, ok = r.(error)
-			if !ok{
+			if !ok {
 				err = fmt.Errorf("%v", r)
 			}
 		}
@@ -32,39 +33,47 @@ func Parse(classData []byte) (cf *ClassFile, err error){
 	return
 }
 
-func (self *ClassFile) read(reader *ClassReader){
+func (self *ClassFile) read(reader *ClassReader) {
 	self.readAndCheckMagic(reader)
 	self.readAndCheckVersion(reader)
 	self.constantPool = readConstantPool(reader)
+	fmt.Printf("x1:\n")
 	self.accessFlags = reader.readUint16()
+	fmt.Printf("x2:\n")
 	self.thisClass = reader.readUint16()
+	fmt.Printf("x3:\n")
 	self.superClass = reader.readUint16()
+	fmt.Printf("x4:\n")
 	self.interfaces = reader.readUint16s()
+	fmt.Printf("x5:\n")
 	self.fields = readMembers(reader, self.constantPool)
+	fmt.Printf("x6:\n")
 	self.methods = readMembers(reader, self.constantPool)
+	fmt.Printf("x7:\n")
 	self.attributes = readAttributes(reader, self.constantPool)
+	fmt.Printf("x8s:\n")
 }
 
-func (self *ClassFile) MajorVersion() uint16{
+func (self *ClassFile) MajorVersion() uint16 {
 	return self.majorVersion
 }
 
-func (self *ClassFile) MinorVersion() uint16{
+func (self *ClassFile) MinorVersion() uint16 {
 	return self.minorVersion
 }
 
-func (self *ClassFile) ClassName() string{
+func (self *ClassFile) ClassName() string {
 	return self.constantPool.getClassName(self.thisClass)
 }
 
-func (self *ClassFile) SuperClassName() string{
-	if self.superClass > 0{
+func (self *ClassFile) SuperClassName() string {
+	if self.superClass > 0 {
 		return self.constantPool.getClassName(self.superClass)
 	}
-	return ""	
+	return ""
 }
 
-func (self *ClassFile) InterfaceNames() []string{
+func (self *ClassFile) InterfaceNames() []string {
 	interfaceNames := make([]string, len(self.interfaces))
 	for i, cpIndex := range self.interfaces {
 		interfaceNames[i] = self.constantPool.getClassName(cpIndex)
@@ -72,23 +81,23 @@ func (self *ClassFile) InterfaceNames() []string{
 	return interfaceNames
 }
 
-func (self *ClassFile) readAndCheckMagic(reader *ClassReader){
+func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {
 	magic := reader.readUint32()
 	if magic != 0xCAFEBABE {
 		panic("java.lang.ClassFormatError:magic!")
 	}
 }
 
-func (self *ClassFile) readAndCheckVersion(reader *ClassReader){
+func (self *ClassFile) readAndCheckVersion(reader *ClassReader) {
 	self.minorVersion = reader.readUint16()
 	self.majorVersion = reader.readUint16()
-	switch self.majorVersion{
+	switch self.majorVersion {
 	case 45:
 		return
 	case 46, 47, 48, 49, 50, 51, 52:
-		if self.minorVersion == 0{
+		if self.minorVersion == 0 {
 			return
 		}
 	}
-	panic("java.lang.UnsupportClassVersionError")	
+	panic("java.lang.UnsupportClassVersionError")
 }

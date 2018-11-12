@@ -1,18 +1,24 @@
 package classfile
 
+import "fmt"
+
 type ConstantPool []ConstantInfo
 
 type ConstantInfo interface {
 	readInfo(reader *ClassReader)
 }
+
 //??
 func readConstantInfo(reader *ClassReader, cp ConstantPool) ConstantInfo {
 	tag := reader.readUint8()
 	c := newConstantInfo(tag, cp)
+	c.readInfo(reader)
 	return c
 }
+
 //?
 func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
+	fmt.Printf("tag = %v\n", tag)
 	switch tag {
 	case CONSTANT_Utf8:
 		return &ConstantUtf8Info{}
@@ -49,10 +55,13 @@ func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 
 func readConstantPool(reader *ClassReader) ConstantPool {
 	cpCount := int(reader.readUint16())
+	fmt.Printf("cpCount = %v\n", cpCount)
 	cp := make([]ConstantInfo, cpCount)
 	for i := 1; i < cpCount; i++ {
+		fmt.Printf("i = %v   ", i)
 		cp[i] = readConstantInfo(reader, cp)
 		//TODO
+
 		switch cp[i].(type) {
 		case *ConstantLongInfo, *ConstantDoubleInfo:
 			i++
