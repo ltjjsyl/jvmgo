@@ -18,7 +18,6 @@ func readConstantInfo(reader *ClassReader, cp ConstantPool) ConstantInfo {
 
 //?
 func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
-	fmt.Printf("tag = %v\n", tag)
 	switch tag {
 	case CONSTANT_Utf8:
 		return &ConstantUtf8Info{}
@@ -58,7 +57,6 @@ func readConstantPool(reader *ClassReader) ConstantPool {
 	fmt.Printf("cpCount = %v\n", cpCount)
 	cp := make([]ConstantInfo, cpCount)
 	for i := 1; i < cpCount; i++ {
-		fmt.Printf("i = %v   ", i)
 		cp[i] = readConstantInfo(reader, cp)
 		//TODO
 

@@ -37,21 +37,14 @@ func (self *ClassFile) read(reader *ClassReader) {
 	self.readAndCheckMagic(reader)
 	self.readAndCheckVersion(reader)
 	self.constantPool = readConstantPool(reader)
-	fmt.Printf("x1:\n")
 	self.accessFlags = reader.readUint16()
-	fmt.Printf("x2:\n")
 	self.thisClass = reader.readUint16()
-	fmt.Printf("x3:\n")
 	self.superClass = reader.readUint16()
-	fmt.Printf("x4:\n")
 	self.interfaces = reader.readUint16s()
-	fmt.Printf("x5:\n")
 	self.fields = readMembers(reader, self.constantPool)
-	fmt.Printf("x6:\n")
 	self.methods = readMembers(reader, self.constantPool)
-	fmt.Printf("x7:\n")
 	self.attributes = readAttributes(reader, self.constantPool)
-	fmt.Printf("x8s:\n")
+
 }
 
 func (self *ClassFile) MajorVersion() uint16 {
@@ -72,7 +65,18 @@ func (self *ClassFile) SuperClassName() string {
 	}
 	return ""
 }
-
+func (self *ClassFile) ConstantPool() ConstantPool {
+	return self.constantPool
+}
+func (self *ClassFile) AccessFlags() uint16 {
+	return self.accessFlags
+}
+func (self *ClassFile) Fields() []*MemberInfo {
+	return self.fields
+}
+func (self *ClassFile) Methods() []*MemberInfo {
+	return self.methods
+}
 func (self *ClassFile) InterfaceNames() []string {
 	interfaceNames := make([]string, len(self.interfaces))
 	for i, cpIndex := range self.interfaces {

@@ -1,7 +1,5 @@
 package classfile
 
-import "fmt"
-
 type MemberInfo struct {
 	cp              ConstantPool
 	accessFlags     uint16
@@ -12,10 +10,8 @@ type MemberInfo struct {
 
 func readMembers(reader *ClassReader, cp ConstantPool) []*MemberInfo {
 	memberCount := reader.readUint16()
-	fmt.Printf("memberCount = %v\n", memberCount)
 	members := make([]*MemberInfo, memberCount)
 	for i := range members {
-		fmt.Printf("i = %v\n", i)
 		members[i] = readMember(reader, cp)
 	}
 	return members
