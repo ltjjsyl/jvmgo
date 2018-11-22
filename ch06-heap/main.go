@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"jvmgo/ch05-instructions/classfile"
-	"jvmgo/ch05-instructions/classpath"
+	"jvmgo/ch06-heap/classfile"
+	"jvmgo/ch06-heap/classpath"
+	"jvmgo/ch06-heap/rtda/heap"
 	"strings"
 )
 
@@ -22,11 +23,12 @@ func main() {
 func startJVM(cmd *Cmd) {
 	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
 	fmt.Printf("classpath:%v class:%v args:%v\n", cp, cmd.class, cmd.args)
+	classLoader := heap.NewClassLoader(cp)
 	className := strings.Replace(cmd.class, ".", "/", -1)
 	fmt.Printf("className:%v\n", className)
-	cf := loadClass(className, cp)
+	mainClass := classLoader.LoadClass(className)
 	fmt.Printf(cmd.class)
-	mainMethod := getMainMethod(cf)
+	mainMethod := mainClass.GetMainMethod()
 	if mainMethod != nil {
 		interpret(mainMethod)
 	} else {
@@ -45,15 +47,4 @@ func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
 		panic(err)
 	}
 	return cf
-}
-
-func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
-	for _, m := range cf.Methods() {
-		fmt.Printf("name : %s\n", m.Name())
-		fmt.Printf("Descriptor : %s\n", m.Descriptor())
-		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
-			return m
-		}
-	}
-	return nil
 }

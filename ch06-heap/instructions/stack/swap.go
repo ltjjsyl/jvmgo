@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"jvmgo/ch05-instructions/instructions/base"
-	"jvmgo/ch05-instructions/rtda"
+	"jvmgo/ch06-heap/instructions/base"
+	"jvmgo/ch06-heap/rtda"
 )
 
 type SWAP struct{ base.NoOperandsInstruction }
@@ -14,4 +14,3 @@ func (self *SWAP) Execute(frame *rtda.Frame) {
 	stack.PushSlot(slot1)
 	stack.PushSlot(slot2)
 }
-

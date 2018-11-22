@@ -7,10 +7,10 @@ type FieldRef struct {
 	field *Field
 }
 
-func newFieldRef(cp *ConatantPool, refInfo *classfile.ConstantFiledrefInfo) *FieldRef {
+func newFieldRef(cp *ConstantPool, refInfo *classfile.ConstantFieldrefInfo) *FieldRef {
 	ref := &FieldRef{}
 	ref.cp = cp
-	ref.copyMemberRefInfo(&refInfo.ConstantMemberInfo)
+	ref.copyMemberRefInfo(&refInfo.ConstantMemberrefInfo)
 	return ref
 }
 

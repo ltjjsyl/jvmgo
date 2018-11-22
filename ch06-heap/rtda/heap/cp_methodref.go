@@ -7,7 +7,7 @@ type MethodRef struct {
 	method *Method
 }
 
-func newMethodRef(cp *ConatantPool, refInfo *classfile.ConstantMethodrefInfo) *MethodRef {
+func newMethodRef(cp *ConstantPool, refInfo *classfile.ConstantMethodrefInfo) *MethodRef {
 	ref := &MethodRef{}
 	ref.cp = cp
 	ref.copyMemberRefInfo(&refInfo.ConstantMemberrefInfo)

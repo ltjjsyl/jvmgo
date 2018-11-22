@@ -10,7 +10,7 @@ func (self *SymRef) ResolvedClass() *Class {
 	if self.class == nil {
 		self.resolvedClassRef()
 	}
-	return slef.class
+	return self.class
 }
 
 func (self *SymRef) resolvedClassRef() {

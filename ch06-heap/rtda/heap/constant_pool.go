@@ -20,41 +20,41 @@ func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 		switch cpInfo.(type) {
 		case *classfile.ConstantIntegerInfo:
 			intInfo := cpInfo.(*classfile.ConstantIntegerInfo)
-			consts[i] = intInfo.Value() // int32
+			counts[i] = intInfo.Value() // int32
 
 		case *classfile.ConstantFloatInfo:
 			floatInfo := cpInfo.(*classfile.ConstantFloatInfo)
-			consts[i] = floatInfo.Value() // float32
+			counts[i] = floatInfo.Value() // float32
 
 		case *classfile.ConstantLongInfo:
 			longInfo := cpInfo.(*classfile.ConstantLongInfo)
-			consts[i] = longInfo.Value() // int64
+			counts[i] = longInfo.Value() // int64
 			i++
 
 		case *classfile.ConstantDoubleInfo:
 			doubleInfo := cpInfo.(*classfile.ConstantDoubleInfo)
-			consts[i] = doubleInfo.Value() // float64
+			counts[i] = doubleInfo.Value() // float64
 			i++
 
 		case *classfile.ConstantStringInfo:
 			stringInfo := cpInfo.(*classfile.ConstantStringInfo)
-			consts[i] = stringInfo.String() // string
+			counts[i] = stringInfo.String() // string
 
 		case *classfile.ConstantClassInfo:
 			classInfo := cpInfo.(*classfile.ConstantClassInfo)
-			consts[i] = newClassRef(rtCp, classInfo) // class
+			counts[i] = newClassRef(rtCp, classInfo) // class
 
-		case *classfile.ConstantFieldRefInfo:
-			fieldrefInfo := cpInfo.(*classfile.ConstantFieldRefInfo)
-			consts[i] = newClassRef(rtCp, fieldrefInfo) // fieldref
+		case *classfile.ConstantFieldrefInfo:
+			fieldrefInfo := cpInfo.(*classfile.ConstantFieldrefInfo)
+			counts[i] = newFieldRef(rtCp, fieldrefInfo) // fieldref
 
-		case *classfile.ConstantMethodRefInfo:
-			methodrefInfo := cpInfo.(*classfile.ConstantMethodRefInfo)
-			consts[i] = newClassRef(rtCp, methodrefInfo) // methodref
+		case *classfile.ConstantMethodrefInfo:
+			methodrefInfo := cpInfo.(*classfile.ConstantMethodrefInfo)
+			counts[i] = newMethodRef(rtCp, methodrefInfo) // methodref
 
-		case *classfile.ConstantInterfaceMethodRefInfo:
-			methodrefInfo := cpInfo.(*classfile.ConstanConstantInterfaceMethodRefInfotMethodRefInfo)
-			consts[i] = newClassRef(rtCp, methodrefInfo) // methodref
+		case *classfile.ConstantInterfaceMethodrefInfo:
+			methodrefInfo := cpInfo.(*classfile.ConstantInterfaceMethodrefInfo)
+			counts[i] = newInterfaceMethodRef(rtCp, methodrefInfo) // methodref
 		}
 	}
 	return rtCp
@@ -64,5 +64,5 @@ func (self *ConstantPool) GetConstant(index uint) Constant {
 	if c := self.consts[index]; c != nil {
 		return c
 	}
-	panic(fmt.Printf("No constants at index %d", index))
+	panic(fmt.Sprintf("No constants at index %d", index))
 }

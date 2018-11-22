@@ -1,7 +1,7 @@
 package references
 
-import "jvmgo/ch06/instructions/base"
-import "jvmgo/ch06/rtda"
+import "jvmgo/ch06-heap/instructions/base"
+import "jvmgo/ch06-heap/rtda"
 
 // Invoke instance method;
 // special handling for superclass, private, and instance initialization method invocations

@@ -1,7 +1,7 @@
 package stack
 
-import "jvmgo/ch05-instructions/instructions/base"
-import "jvmgo/ch05-instructions/rtda"
+import "jvmgo/ch06-heap/instructions/base"
+import "jvmgo/ch06-heap/rtda"
 
 // Duplicate the top operand stack value
 type DUP struct{ base.NoOperandsInstruction }

@@ -1,8 +1,8 @@
 package references
 
-import "jvmgo/ch06/instructions/base"
-import "jvmgo/ch06/rtda"
-import "jvmgo/ch06/rtda/heap"
+import "jvmgo/ch06-heap/instructions/base"
+import "jvmgo/ch06-heap/rtda"
+import "jvmgo/ch06-heap/rtda/heap"
 
 // Check whether object is of given type
 type CHECK_CAST struct{ base.Index16Instruction }

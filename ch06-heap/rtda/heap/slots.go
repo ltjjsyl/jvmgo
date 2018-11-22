@@ -1,5 +1,9 @@
 package heap
 
+import (
+	"math"
+)
+
 type Slot struct {
 	num int32
 	ref *Object
@@ -7,7 +11,7 @@ type Slot struct {
 
 type Slots []Slot
 
-unc newSlots(maxLocals uint16) Slots {
+func newSlots(maxLocals uint) Slots {
 	if maxLocals > 0 {
 		return make([]Slot, maxLocals)
 	}
@@ -49,9 +53,9 @@ func (self Slots) GetDouble(index uint) float64 {
 	return math.Float64frombits(bits)
 }
 
-func (self Slots) SetRef(index uint, ref *heap.Object) {
+func (self Slots) SetRef(index uint, ref *Object) {
 	self[index].ref = ref
 }
-func (self Slots) GetRef(index uint) *heap.Object {
+func (self Slots) GetRef(index uint) *Object {
 	return self[index].ref
 }

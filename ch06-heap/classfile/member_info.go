@@ -49,12 +49,12 @@ func (self *MemberInfo) CodeAttribute() *CodeAttribute {
 	return nil
 }
 
-func (self *MemberInfo) ConstantVlaueAttribute() *ConstantVlaueAttribute {
+func (self *MemberInfo) ConstantValueAttribute() *ConstantValueAttribute {
 	for _, attrInfo := range self.attributes {
 		switch attrInfo.(type) {
-		case *ConstantVlaueAttribute:
+		case *ConstantValueAttribute:
 			{
-				return attrInfo.(*ConstantVlaueAttribute)
+				return attrInfo.(*ConstantValueAttribute)
 			}
 		}
 	}

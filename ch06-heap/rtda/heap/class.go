@@ -8,6 +8,7 @@ import (
 type Class struct {
 	accessFlags        uint16
 	name               string //thisClassName
+	superClassName     string
 	interfacesNames    []string
 	constantPool       *ConstantPool
 	fields             []*Field
@@ -17,21 +18,28 @@ type Class struct {
 	interfaces         []*Class
 	intstanceSlotCount uint
 	staticSlotCount    uint
-	staticVars         *Slots
+	staticVars         Slots
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
 	class := &Class{}
 	class.accessFlags = cf.AccessFlags()
 	class.name = cf.ClassName()
-	class.superClass = cf.SuperClassName()
-	class.interfaaceNames = cf.InterfaceNames()
+	class.superClassName = cf.SuperClassName()
+	class.interfacesNames = cf.InterfaceNames()
 	class.constantPool = newConstantPool(class, cf.ConstantPool())
 	class.fields = newFields(class, cf.Fields())
 	class.methods = newMethods(class, cf.Methods())
 	return class
 }
 
+// getters
+func (self *Class) ConstantPool() *ConstantPool {
+	return self.constantPool
+}
+func (self *Class) StaticVars() Slots {
+	return self.staticVars
+}
 func (self *Class) IsPublic() bool {
 	return 0 != self.accessFlags&ACC_PUBLIC
 }
@@ -66,4 +74,20 @@ func (self *Class) getPackageName() string {
 		return self.name[:i]
 	}
 	return ""
+}
+func (self *Class) GetMainMethod() *Method {
+	return self.getStaticMethod("main", "([Ljava/lang/String;)V")
+}
+
+func (self *Class) getStaticMethod(name, descriptor string) *Method {
+	for _, method := range self.methods {
+		if method.IsStatic() && method.name == name && method.descriptor == descriptor {
+			return method
+		}
+	}
+	return nil
+}
+
+func (self *Class) isSubClassOf(other *Class) bool {
+	return self.superClass == other
 }

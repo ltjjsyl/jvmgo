@@ -7,7 +7,7 @@ import (
 
 type LocalVars []Slot
 
-func newLocalVars(maxLocals uint16) LocalVars {
+func newLocalVars(maxLocals uint) LocalVars {
 	if maxLocals > 0 {
 		return make([]Slot, maxLocals)
 	}

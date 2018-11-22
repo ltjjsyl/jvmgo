@@ -1,8 +1,8 @@
 package references
 
-import "jvmgo/ch06/instructions/base"
-import "jvmgo/ch06/rtda"
-import "jvmgo/ch06/rtda/heap"
+import "jvmgo/ch06-heap/instructions/base"
+import "jvmgo/ch06-heap/rtda"
+import "jvmgo/ch06-heap/rtda/heap"
 
 // Create new object
 type NEW struct{ base.Index16Instruction }

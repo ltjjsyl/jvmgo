@@ -1,8 +1,8 @@
 package math
 
 import "math"
-import "jvmgo/ch05-instructions/instructions/base"
-import "jvmgo/ch05-instructions/rtda"
+import "jvmgo/ch06-heap/instructions/base"
+import "jvmgo/ch06-heap/rtda"
 
 // Remainder double
 type DREM struct{ base.NoOperandsInstruction }
